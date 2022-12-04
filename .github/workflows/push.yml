@@ -1,0 +1,32 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Deno
+      uses: denoland/setup-deno@v1
+      with:
+        deno-version: v1.x
+
+    - name: Install Windmill CLI
+      run: deno install --unstable -A https://deno.land/x/wmill/main.ts
+
+    - name: Setup Windmill
+      run: wmill workspace add automation git-demo https://app.windmill.dev/ --token ${{ secrets.WM_API_TOKEN }}
+
+    - name: Push local files
+      run: wmill push .
