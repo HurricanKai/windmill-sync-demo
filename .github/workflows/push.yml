@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  terraform:
+  windmill:
     runs-on: ubuntu-latest
     environment: production
 
